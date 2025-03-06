@@ -52,22 +52,48 @@ public class TabellMengde<T> implements MengdeADT<T> {
 
     @Override
     public boolean erDisjunkt(MengdeADT<T> annenMengde) {
-        return false;
+        for (int i = 0; i < antall; i++) {
+            if (annenMengde.inneholder(tab[i])) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public MengdeADT<T> snitt(MengdeADT<T> annenMengde) {
-        return null;
+        MengdeADT<T> nyMengde = new TabellMengde<>();
+        for (int i = 0; i < antall; i++) {
+            if (annenMengde.inneholder(tab[i])) {
+                nyMengde.leggTil(tab[i]);
+            }
+        }
+        return nyMengde;
     }
 
     @Override
     public MengdeADT<T> union(MengdeADT<T> annenMengde) {
-        return null;
+        MengdeADT<T> nyMengde = new TabellMengde<>();
+
+        for (int i = 0; i < antall; i++) {
+            nyMengde.leggTil(tab[i]);
+        }
+
+        for (int i = 0; i < annenMengde.antallElementer(); i++) {
+            nyMengde.leggTilAlleFra(annenMengde);
+        }
+        return nyMengde;
     }
 
     @Override
     public MengdeADT<T> minus(MengdeADT<T> annenMengde) {
-        return null;
+        MengdeADT<T> nyMengde = new TabellMengde<>();
+        for (int i = 0; i < antall; i++) {
+            if (inneholder(tab[i]) && !annenMengde.inneholder(tab[i])) {
+                nyMengde.leggTil(tab[i]);
+            }
+        }
+        return nyMengde;
     }
 
     @Override
@@ -84,22 +110,48 @@ public class TabellMengde<T> implements MengdeADT<T> {
 
     @Override
     public void leggTilAlleFra(MengdeADT<T> annenMengde) {
-
+        T[] tabAnnenMengde = annenMengde.tilTabell();
+        for (int i = 0; i < annenMengde.antallElementer(); i++) {
+            leggTil(tabAnnenMengde[i]);
+        }
     }
 
     @Override
     public T fjern(T element) {
-        return null;
+        if (!inneholder(element)) {
+            return null;
+        }
+
+        int indeks = 0;
+        for (int i = 0; i < antall; i++) {
+            if (tab[i].equals(element)) {
+                indeks = i;
+            }
+        }
+        T data = tab[indeks];
+
+        for (int i = indeks; i < antall; i++) {
+            tab[i] = tab[i + 1];
+        }
+        tab[antall] = null;
+        antall--;
+
+        return data;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public T[] tilTabell() {
-        return null;
+        T[] tabell = (T[]) new Object[antall];
+        for (int i = 0; i < antall; i++) {
+            tabell[i] = tab[i];
+        }
+        return tabell;
     }
 
     @Override
     public int antallElementer() {
-        return 0;
+        return antall;
     }
 
     // utvider tabell når den er full
