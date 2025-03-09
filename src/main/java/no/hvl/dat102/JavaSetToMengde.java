@@ -4,7 +4,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class JavaSetToMengde<T> implements MengdeADT<T> {
-    private Set<T> mengde = new HashSet<>();
+    private Set<T> mengde;
+
+    public JavaSetToMengde() {
+        mengde = new HashSet<>();
+    }
 
     @Override
     public boolean erTom() {
@@ -18,32 +22,56 @@ public class JavaSetToMengde<T> implements MengdeADT<T> {
 
     @Override
     public boolean erDelmengdeAv(MengdeADT<T> annenMengde) {
-        return mengde.containsAll(Set.of(annenMengde.tilTabell()));
+        Set<T> set = Set.of(annenMengde.tilTabell());
+        return set.containsAll(mengde);
     }
 
     @Override
     public boolean erLik(MengdeADT<T> annenMengde) {
-        return false;
+        Set<T> set = Set.of(annenMengde.tilTabell());
+        return set.equals(mengde);
     }
 
     @Override
     public boolean erDisjunkt(MengdeADT<T> annenMengde) {
-        return false;
+        Set<T> set = new HashSet<>(Set.of(annenMengde.tilTabell()));
+        set.retainAll(mengde);
+        return set.isEmpty();
     }
 
     @Override
     public MengdeADT<T> snitt(MengdeADT<T> annenMengde) {
-        return null;
+        MengdeADT<T> nyMengde = new JavaSetToMengde<>();
+        Set<T> set = new HashSet<>(Set.of(annenMengde.tilTabell()));
+        set.retainAll(mengde);
+        for (T element : set) {
+            nyMengde.leggTil(element);
+        }
+        return nyMengde;
     }
 
     @Override
     public MengdeADT<T> union(MengdeADT<T> annenMengde) {
-        return null;
+        Set<T> set = new HashSet<>(Set.of(annenMengde.tilTabell()));
+        set.addAll(mengde);
+        MengdeADT<T> nyMengde = new JavaSetToMengde<>();
+        for (T element : set) {
+            nyMengde.leggTil(element);
+        }
+        return nyMengde;
     }
 
     @Override
     public MengdeADT<T> minus(MengdeADT<T> annenMengde) {
-        return null;
+        Set<T> set = new HashSet<>(Set.of(annenMengde.tilTabell()));
+        Set<T> denneSet = new HashSet<>(mengde);
+        denneSet.removeAll(set);
+        MengdeADT<T> nyMengde = new JavaSetToMengde<>();
+
+        for (T element : denneSet) {
+            nyMengde.leggTil(element);
+        }
+        return nyMengde;
     }
 
     @Override
@@ -53,7 +81,8 @@ public class JavaSetToMengde<T> implements MengdeADT<T> {
 
     @Override
     public void leggTilAlleFra(MengdeADT<T> annenMengde) {
-
+        Set<T> set = new HashSet<>(Set.of(annenMengde.tilTabell()));
+        mengde.addAll(set);
     }
 
     @Override

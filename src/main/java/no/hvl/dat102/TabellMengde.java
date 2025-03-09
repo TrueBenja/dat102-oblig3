@@ -31,11 +31,6 @@ public class TabellMengde<T> implements MengdeADT<T> {
 
     @Override
     public boolean erDelmengdeAv(MengdeADT<T> annenMengde) {
-        // Alle tomme mengder er delmengde av alle andre mengder
-        if (annenMengde.erTom()) {
-            return true;
-        }
-
         // Sjekker om annenMengde inneholder alle elementene i denne mengden
         for (int i = 0; i < antall; i++) {
             if (!annenMengde.inneholder(tab[i])) {
@@ -47,6 +42,7 @@ public class TabellMengde<T> implements MengdeADT<T> {
 
     @Override
     public boolean erLik(MengdeADT<T> annenMengde) {
+        // En mengde er lik en annen hvis den er delmengde av annenMengde, og har likt antall elementer
         return antall == annenMengde.antallElementer() && erDelmengdeAv(annenMengde);
     }
 
