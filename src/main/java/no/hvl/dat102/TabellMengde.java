@@ -3,7 +3,7 @@ package no.hvl.dat102;
 import java.util.Arrays;
 
 public class TabellMengde<T> implements MengdeADT<T> {
-    private final int INITIAL_CAPACITY = 10;
+    private final int INITIAL_CAPACITY = 5;
     private T[] tab;
     private int antall;
 
@@ -75,9 +75,7 @@ public class TabellMengde<T> implements MengdeADT<T> {
             nyMengde.leggTil(tab[i]);
         }
 
-        for (int i = 0; i < annenMengde.antallElementer(); i++) {
-            nyMengde.leggTilAlleFra(annenMengde);
-        }
+        nyMengde.leggTilAlleFra(annenMengde);
         return nyMengde;
     }
 
@@ -126,9 +124,12 @@ public class TabellMengde<T> implements MengdeADT<T> {
         }
         T data = tab[indeks];
 
-        for (int i = indeks; i < antall; i++) {
-            tab[i] = tab[i + 1];
-        }
+        // En måte å organisere tabellen slik at den er ordnet, men en mengde er ikke ordnet
+//        for (int i = indeks; i < antall; i++) {
+//            tab[i] = tab[i + 1];
+//        }
+
+        tab[indeks] = tab[antall];
         tab[antall] = null;
         antall--;
 
