@@ -13,7 +13,14 @@ public abstract class AbstractMengdeADTTest {
     private MengdeADT<String> mengdeMed3ElementUlik;
     private MengdeADT<String> mengdeMed5Element;
 
+    private MengdeADT<Integer> mengdeMed10Tall;
+    private MengdeADT<Integer> mengdeMed5Tall;
+    private MengdeADT<Integer> mengdeMed5TallLik;
+    private MengdeADT<Integer> mengdeMed5TallUlik;
+    private MengdeADT<Integer> tomTallMengde;
+
     abstract MengdeADT<String> opprettNyMengdeOfString();
+    abstract MengdeADT<Integer> opprettNyMengdeOfInteger();
 
     @BeforeEach
     public void nullstill() {
@@ -46,6 +53,23 @@ public abstract class AbstractMengdeADTTest {
         mengdeMed5Element.leggTil("Banan");
         mengdeMed5Element.leggTil("Pære");
         mengdeMed5Element.leggTil("Stjernefrukt");
+
+        mengdeMed10Tall = opprettNyMengdeOfInteger();
+        for (int i = 0; i < 10; i++) {
+            mengdeMed10Tall.leggTil(i);
+        }
+        mengdeMed5Tall = opprettNyMengdeOfInteger();
+        mengdeMed5TallLik = opprettNyMengdeOfInteger();
+        for (int i = 0; i < 5; i++) {
+            mengdeMed5Tall.leggTil(i);
+            mengdeMed5TallLik.leggTil(i);
+        }
+        mengdeMed5TallUlik = opprettNyMengdeOfInteger();
+        for (int i = 5; i < 10; i++) {
+            mengdeMed5TallUlik.leggTil(i);
+        }
+
+        tomTallMengde = opprettNyMengdeOfInteger();
     }
 
     @Test
@@ -53,6 +77,9 @@ public abstract class AbstractMengdeADTTest {
         assertTrue(mengdeMed3Element.inneholder("Eple"));
         assertFalse(mengdeMed3Element.inneholder("Ananas"));
         assertFalse(mengdeMed3ElementUlik.inneholder("Banan"));
+
+        assertTrue(mengdeMed5Tall.inneholder(3));
+        assertFalse(mengdeMed5Tall.inneholder(5));
     }
 
     @Test
@@ -61,6 +88,10 @@ public abstract class AbstractMengdeADTTest {
         assertFalse(mengdeMed4Element.erDelmengdeAv(mengdeMed3Element));
         assertTrue(tomMengde.erDelmengdeAv(mengdeMed3Element));
         assertTrue(mengdeMed3Element.erDelmengdeAv(mengdeMed3ElementLik));
+
+        assertTrue(mengdeMed5Tall.erDelmengdeAv(mengdeMed10Tall));
+        assertFalse(mengdeMed10Tall.erDelmengdeAv(mengdeMed5Tall));
+        assertFalse(mengdeMed5Tall.erDelmengdeAv(mengdeMed5TallUlik));
     }
 
     @Test
@@ -68,6 +99,11 @@ public abstract class AbstractMengdeADTTest {
         assertTrue(mengdeMed3Element.erLik(mengdeMed3ElementLik));
         assertFalse(mengdeMed3Element.erLik(mengdeMed4Element));
         assertFalse(mengdeMed3Element.erLik(tomMengde));
+
+        assertTrue(mengdeMed5Tall.erLik(mengdeMed5TallLik));
+        assertFalse(mengdeMed5Tall.erLik(mengdeMed5TallUlik));
+        assertFalse(mengdeMed5Tall.erLik(mengdeMed10Tall));
+        assertTrue(mengdeMed10Tall.erLik(mengdeMed10Tall));
     }
 
     @Test
@@ -75,6 +111,10 @@ public abstract class AbstractMengdeADTTest {
         assertTrue(mengdeMed3Element.erDisjunkt(mengdeMed3ElementUlik));
         assertFalse(mengdeMed3Element.erDisjunkt(mengdeMed3ElementLik));
         assertFalse(mengdeMed3Element.erDisjunkt(mengdeMed4Element));
+
+        assertTrue(mengdeMed5Tall.erDisjunkt(mengdeMed5TallUlik));
+        assertFalse(mengdeMed10Tall.erDisjunkt(mengdeMed5Tall));
+        assertFalse(mengdeMed10Tall.erDisjunkt(mengdeMed5TallUlik));
     }
 
     @Test
@@ -88,6 +128,12 @@ public abstract class AbstractMengdeADTTest {
 
         assertTrue(testMengde.erLik(snittMengde));
         assertTrue(tomMengde.erLik(snittMengdeTom));
+
+        MengdeADT<Integer> testTallMengde = mengdeMed5Tall.snitt(mengdeMed5TallUlik);
+        assertTrue(testTallMengde.erTom());
+
+        testTallMengde = mengdeMed5Tall.snitt(mengdeMed10Tall);
+        assertTrue(testTallMengde.erLik(mengdeMed5Tall));
     }
 
     @Test
@@ -102,6 +148,8 @@ public abstract class AbstractMengdeADTTest {
 
         MengdeADT<String> unionMengde = mengdeMed3Element.union(mengdeMed3ElementUlik);
         assertTrue(testMengde.erLik(unionMengde));
+
+        assertTrue(mengdeMed5Tall.union(mengdeMed5TallUlik).erLik(mengdeMed10Tall));
     }
 
     @Test
@@ -111,6 +159,9 @@ public abstract class AbstractMengdeADTTest {
 
         assertNull(mengdeMed3ElementLik.fjern("Stjernefrukt"));
         assertEquals(3, mengdeMed3ElementLik.antallElementer());
+
+        assertEquals(4, mengdeMed5Tall.fjern(4));
+        assertEquals(4, mengdeMed5Tall.antallElementer());
     }
 
     @Test
@@ -122,5 +173,18 @@ public abstract class AbstractMengdeADTTest {
 
         MengdeADT<String> minusMengde = mengdeMed5Element.minus(mengdeMed3Element);
         assertTrue(minusMengde.erLik(testMengde));
+
+        assertTrue(mengdeMed5Tall.minus(mengdeMed5TallLik).erTom());
+        assertTrue(mengdeMed10Tall.minus(mengdeMed5Tall).erLik(mengdeMed5TallUlik));
+        assertFalse(mengdeMed5Tall.minus(mengdeMed5TallUlik).erTom());
+    }
+
+    @Test
+    public void testLeggTilAlleFra() {
+        tomTallMengde.leggTilAlleFra(mengdeMed5Tall);
+        assertTrue(tomTallMengde.erLik(mengdeMed5Tall));
+
+        mengdeMed5Tall.leggTilAlleFra(mengdeMed5TallUlik);
+        assertTrue(mengdeMed5Tall.erLik(mengdeMed10Tall));
     }
 }
