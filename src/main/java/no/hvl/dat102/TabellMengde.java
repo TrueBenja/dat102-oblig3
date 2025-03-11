@@ -48,6 +48,10 @@ public class TabellMengde<T> implements MengdeADT<T> {
 
     @Override
     public boolean erDisjunkt(MengdeADT<T> annenMengde) {
+        if (erTom() || annenMengde.erTom()) {
+            return false;
+        }
+
         for (int i = 0; i < antall; i++) {
             if (annenMengde.inneholder(tab[i])) {
                 return false;

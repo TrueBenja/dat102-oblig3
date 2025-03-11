@@ -34,6 +34,10 @@ public class JavaSetToMengde<T> implements MengdeADT<T> {
 
     @Override
     public boolean erDisjunkt(MengdeADT<T> annenMengde) {
+        if (erTom() || annenMengde.erTom()) {
+            return false;
+        }
+
         Set<T> set = new HashSet<>(Set.of(annenMengde.tilTabell()));
         set.retainAll(mengde);
         return set.isEmpty();

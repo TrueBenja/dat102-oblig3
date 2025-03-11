@@ -58,6 +58,10 @@ public class LenketMengde<T> implements MengdeADT<T> {
 
     @Override
     public boolean erDisjunkt(MengdeADT<T> annenMengde) {
+        if (erTom() || annenMengde.erTom()) {
+            return false;
+        }
+
         Node current = forste;
         while (current != null) {
             if (annenMengde.inneholder(current.data)) {

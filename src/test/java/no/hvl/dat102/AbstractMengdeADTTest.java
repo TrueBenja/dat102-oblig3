@@ -112,6 +112,9 @@ public abstract class AbstractMengdeADTTest {
         assertFalse(mengdeMed3Element.erDisjunkt(mengdeMed3ElementLik));
         assertFalse(mengdeMed3Element.erDisjunkt(mengdeMed4Element));
 
+        assertFalse(tomMengde.erDisjunkt(mengdeMed3Element));
+        assertFalse(mengdeMed3Element.erDisjunkt(tomMengde));
+
         assertTrue(mengdeMed5Tall.erDisjunkt(mengdeMed5TallUlik));
         assertFalse(mengdeMed10Tall.erDisjunkt(mengdeMed5Tall));
         assertFalse(mengdeMed10Tall.erDisjunkt(mengdeMed5TallUlik));
