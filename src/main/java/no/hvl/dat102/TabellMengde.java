@@ -74,11 +74,8 @@ public class TabellMengde<T> implements MengdeADT<T> {
     @Override
     public MengdeADT<T> union(MengdeADT<T> annenMengde) {
         MengdeADT<T> nyMengde = new TabellMengde<>();
-
-        for (int i = 0; i < antall; i++) {
-            nyMengde.leggTil(tab[i]);
-        }
-
+        
+        nyMengde.leggTilAlleFra(this);
         nyMengde.leggTilAlleFra(annenMengde);
         return nyMengde;
     }
@@ -87,7 +84,7 @@ public class TabellMengde<T> implements MengdeADT<T> {
     public MengdeADT<T> minus(MengdeADT<T> annenMengde) {
         MengdeADT<T> nyMengde = new TabellMengde<>();
         for (int i = 0; i < antall; i++) {
-            if (inneholder(tab[i]) && !annenMengde.inneholder(tab[i])) {
+            if (!annenMengde.inneholder(tab[i])) {
                 nyMengde.leggTil(tab[i]);
             }
         }
@@ -116,26 +113,20 @@ public class TabellMengde<T> implements MengdeADT<T> {
 
     @Override
     public T fjern(T element) {
-        if (!inneholder(element)) {
-            return null;
-        }
-
-        int indeks = 0;
+        int indeks = -1;
         for (int i = 0; i < antall; i++) {
             if (tab[i].equals(element)) {
                 indeks = i;
             }
         }
-        T data = tab[indeks];
 
-        // En måte å organisere tabellen slik at den er ordnet, men en mengde er ikke ordnet
-//        for (int i = indeks; i < antall; i++) {
-//            tab[i] = tab[i + 1];
-//        }
-
-        tab[indeks] = tab[antall];
-        tab[antall] = null;
-        antall--;
+        T data = null;
+        if (indeks > -1) {
+            data = tab[indeks];
+            tab[indeks] = tab[antall];
+            tab[antall] = null;
+            antall--;
+        }
 
         return data;
     }

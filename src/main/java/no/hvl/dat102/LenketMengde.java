@@ -53,7 +53,7 @@ public class LenketMengde<T> implements MengdeADT<T> {
 
     @Override
     public boolean erLik(MengdeADT<T> annenMengde) {
-        return erDelmengdeAv(annenMengde) && antall == annenMengde.antallElementer();
+        return antall == annenMengde.antallElementer() && erDelmengdeAv(annenMengde);
     }
 
     @Override
@@ -81,7 +81,6 @@ public class LenketMengde<T> implements MengdeADT<T> {
             if (annenMengde.inneholder(current.data)) {
                 nyMengde.leggTil(current.data);
             }
-
             current = current.neste;
         }
 
@@ -115,12 +114,12 @@ public class LenketMengde<T> implements MengdeADT<T> {
 
     @Override
     public void leggTil(T element) {
-        Node nyNode = new Node(element);
-        if (forste != null) {
+        if (!inneholder(element)) {
+            Node nyNode = new Node(element);
             nyNode.neste = forste;
+            forste = nyNode;
+            antall++;
         }
-        forste = nyNode;
-        antall++;
     }
 
     @Override
@@ -134,10 +133,6 @@ public class LenketMengde<T> implements MengdeADT<T> {
 
     @Override
     public T fjern(T element) {
-        if (!inneholder(element)) {
-            return null;
-        }
-
         if (forste.data.equals(element)) {
             T data = forste.data;
             forste = forste.neste;
@@ -156,6 +151,7 @@ public class LenketMengde<T> implements MengdeADT<T> {
                 antall--;
             }
             current = current.neste;
+            forrige = forrige.neste;
         }
         return data;
     }
@@ -167,11 +163,9 @@ public class LenketMengde<T> implements MengdeADT<T> {
 
         Node current = forste;
 
-        int i = 0;
-        while (current != null) {
+        for (int i = 0; current != null; i++) {
             tabell[i] = current.data;
             current = current.neste;
-            i++;
         }
 
         return tabell;
