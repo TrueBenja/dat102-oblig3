@@ -51,7 +51,7 @@ public class HashSetSoking {
         for (int i = 0; i < storrelse; i++) {
             tall = (tall + 45713) % storrelse;
             tab[i] = tall;
-            set.add(tab[i]);
+            set.add(tall);
         }
     }
 
