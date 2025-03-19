@@ -10,6 +10,7 @@ public class TabellMengde<T> implements MengdeADT<T> {
     @SuppressWarnings("unchecked")
     public TabellMengde() {
         tab = (T[]) new Object[INITIAL_CAPACITY];
+        antall = 0;
     }
 
     @Override
